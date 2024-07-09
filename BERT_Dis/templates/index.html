@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BERT News Classifier</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 0;
+            font-size: 24px;
+            text-align: center;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .form-group {
+            margin-top: 20px;
+        }
+        #result {
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <header>BERT News Classifier</header>
+    <div class="container">
+        <form action="/" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <textarea name="news_text" class="form-control" rows="6" placeholder="Paste your article text here...">{{ transcription }}</textarea>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+        {% if transcription %}
+            <div class="alert alert-info" role="alert">
+                <strong>Transcribed Text:</strong> {{ transcription }}
+            </div>
+        {% endif %}
+        {% if prediction_text %}
+            <div id="result" class="alert {% if prediction_reliable %}alert-success{% else %}alert-danger{% endif %}">
+                {{ prediction_text }}
+            </div>
+        {% endif %}
+        {% if prediction_text %}
+        <form action="{{ url_for('feedback') }}" method="post">
+            <div class="form-group">
+                <label for="feedback">Feedback:</label>
+                <textarea name="feedback" class="form-control" rows="4" placeholder="Write your feedback here..." required></textarea>
+            </div>
+            <div class="form-group mt-2">
+                <label>Satisfaction:</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="satisfaction" id="satisfied" value="satisfied" required>
+                    <label class="form-check-label" for="satisfied">
+                        Satisfied
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="satisfaction" id="not_satisfied" value="not_satisfied" required>
+                    <label class="form-check-label" for="not_satisfied">
+                        Not Satisfied
+                    </label>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Submit Feedback</button>
+        </form>
+    {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
